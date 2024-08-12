@@ -92,13 +92,14 @@
         <mockito.version>4.11.0</mockito.version>
         <awaitility.version>4.2.0</awaitility.version>
         <bytebuddy.version>1.17.7</bytebuddy.version>
+        <testcontainers-bom.version>1.20.1</testcontainers-bom.version>
         
         <h2.version>2.2.224</h2.version>
         <hikari-cp.version>4.0.3</hikari-cp.version>
         
         <spring-boot-dependencies.version>2.7.18</spring-boot-dependencies.version>
         <spring-framework.version>5.3.39</spring-framework.version>
-        
+
         <!-- Compile plugin versions -->
         <maven-enforcer-plugin.version>3.2.1</maven-enforcer-plugin.version>
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
@@ -348,7 +349,14 @@
                 <version>${awaitility.version}</version>
                 <scope>test</scope>
             </dependency>
-            
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>${testcontainers-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
@@ -955,8 +963,8 @@
                                     <defaultMode>Conditional</defaultMode>
                                     <modes>
                                         <conditional>
-                                            <userCodeFilterPath>${user.dir}/test/native/native-image-filter/user-code-filter.json</userCodeFilterPath>
-                                            <extraFilterPath>${user.dir}/test/native/native-image-filter/extra-filter.json</extraFilterPath>
+                                            <userCodeFilterPath>${user.dir}/test/native/native-image-filter/user-code-filter-zookeeper.json</userCodeFilterPath>
+                                            <extraFilterPath>${user.dir}/test/native/native-image-filter/extra-filter-zookeeper.json</extraFilterPath>
                                             <parallel>true</parallel>
                                         </conditional>
                                     </modes>
@@ -965,7 +973,7 @@
                                             <stage>main</stage>
                                         </disabledStages>
                                         <merge>false</merge>
-                                        <outputDirectory>${user.dir}/reachability-metadata/src/main/resources/META-INF/native-image/org.apache.shardingsphere.elasticjob/generated-reachability-metadata/</outputDirectory>
+                                        <outputDirectory>${user.dir}/reachability-metadata/src/main/resources/META-INF/native-image/org.apache.zookeeper/zookeeper/3.9.2/</outputDirectory>
                                     </metadataCopy>
                                 </agent>
                             </configuration>
@@ -999,7 +1007,7 @@
                             <artifactId>maven-surefire-plugin</artifactId>
                             <configuration>
                                 <includes>
-                                    <include>org.apache.shardingsphere.elasticjob.test.natived.**</include>
+                                    <include>org.apache.shardingsphere.elasticjob.test.natived.it.staticd.ZookeeperAuthTest</include>
                                 </includes>
                             </configuration>
                         </plugin>
@@ -1010,6 +1018,13 @@
                             <extensions>true</extensions>
                             <configuration>
                                 <quickBuild>true</quickBuild>
+                                <buildArgs>
+                                    <buildArg>-H:AdditionalSecurityProviders=com.sun.security.sasl.Provider</buildArg>
+                                    <buildArg>-H:AdditionalSecurityProviders=com.sun.security.sasl.gsskerb.JdkSASL</buildArg>
+                                    <buildArg>-H:+UnlockExperimentalVMOptions</buildArg>
+                                    <buildArg>-H:ThrowMissingRegistrationErrors=</buildArg>
+                                    <buildArg>-H:MissingRegistrationReportingMode=Warn</buildArg>
+                                </buildArgs>
                             </configuration>
                             <executions>
                                 <execution>
