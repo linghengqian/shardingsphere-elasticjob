@@ -56,7 +56,7 @@ class JobStatisticsAPIImplTest {
     
     @Test
     void assertGetOKJobBriefInfo() {
-        when(regCenter.get("/test_job/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job", "desc"));
+        when(regCenter.getDirectly("/test_job/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job", "desc"));
         when(regCenter.getChildrenKeys("/test_job/servers")).thenReturn(Arrays.asList("ip1", "ip2"));
         when(regCenter.getChildrenKeys("/test_job/instances")).thenReturn(Arrays.asList("ip1@-@defaultInstance", "ip2@-@defaultInstance"));
         when(regCenter.getChildrenKeys("/test_job/sharding")).thenReturn(Arrays.asList("0", "1", "2"));
@@ -75,7 +75,7 @@ class JobStatisticsAPIImplTest {
     
     @Test
     void assertGetOKJobBriefInfoWithPartialDisabledServer() {
-        when(regCenter.get("/test_job/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job", "desc"));
+        when(regCenter.getDirectly("/test_job/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job", "desc"));
         when(regCenter.getChildrenKeys("/test_job/servers")).thenReturn(Arrays.asList("ip1", "ip2"));
         when(regCenter.get("/test_job/servers/ip1")).thenReturn("DISABLED");
         when(regCenter.getChildrenKeys("/test_job/instances")).thenReturn(Arrays.asList("ip1@-@defaultInstance", "ip2@-@defaultInstance"));
@@ -88,7 +88,7 @@ class JobStatisticsAPIImplTest {
     
     @Test
     void assertGetDisabledJobBriefInfo() {
-        when(regCenter.get("/test_job/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job", "desc"));
+        when(regCenter.getDirectly("/test_job/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job", "desc"));
         when(regCenter.getChildrenKeys("/test_job/servers")).thenReturn(Arrays.asList("ip1", "ip2"));
         when(regCenter.get("/test_job/servers/ip1")).thenReturn("DISABLED");
         when(regCenter.get("/test_job/servers/ip2")).thenReturn("DISABLED");
@@ -99,7 +99,7 @@ class JobStatisticsAPIImplTest {
     
     @Test
     void assertGetShardingErrorJobBriefInfo() {
-        when(regCenter.get("/test_job/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job", "desc"));
+        when(regCenter.getDirectly("/test_job/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job", "desc"));
         when(regCenter.getChildrenKeys("/test_job/servers")).thenReturn(Arrays.asList("ip1", "ip2"));
         when(regCenter.getChildrenKeys("/test_job/instances")).thenReturn(Arrays.asList("ip1@-@defaultInstance", "ip2@-@defaultInstance"));
         when(regCenter.getChildrenKeys("/test_job/sharding")).thenReturn(Arrays.asList("0", "1", "2"));
@@ -112,7 +112,7 @@ class JobStatisticsAPIImplTest {
     
     @Test
     void assertGetCrashedJobBriefInfo() {
-        when(regCenter.get("/test_job/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job", "desc"));
+        when(regCenter.getDirectly("/test_job/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job", "desc"));
         JobBriefInfo jobBrief = jobStatisticsAPI.getJobBriefInfo("test_job");
         assertThat(jobBrief.getStatus(), is(JobBriefInfo.JobStatus.CRASHED));
     }
@@ -126,8 +126,8 @@ class JobStatisticsAPIImplTest {
     @Test
     void assertGetAllJobsBriefInfo() {
         when(regCenter.getChildrenKeys("/")).thenReturn(Arrays.asList("test_job_1", "test_job_2"));
-        when(regCenter.get("/test_job_1/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job_1", "desc1"));
-        when(regCenter.get("/test_job_2/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job_2", "desc2"));
+        when(regCenter.getDirectly("/test_job_1/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job_1", "desc1"));
+        when(regCenter.getDirectly("/test_job_2/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job_2", "desc2"));
         when(regCenter.getChildrenKeys("/test_job_1/servers")).thenReturn(Arrays.asList("ip1", "ip2"));
         when(regCenter.getChildrenKeys("/test_job_2/servers")).thenReturn(Arrays.asList("ip3", "ip4"));
         when(regCenter.getChildrenKeys("/test_job_1/sharding")).thenReturn(Arrays.asList("0", "1"));

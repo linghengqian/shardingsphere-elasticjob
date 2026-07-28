@@ -53,28 +53,28 @@ class JobConfigurationAPIImplTest {
     
     @Test
     void assertGetJobConfigNull() {
-        when(regCenter.get("/test_job/config")).thenReturn(null);
+        when(regCenter.getDirectly("/test_job/config")).thenReturn(null);
         JobConfigurationPOJO actual = jobConfigAPI.getJobConfiguration("test_job");
         assertNull(actual);
-        verify(regCenter).get("/test_job/config");
+        verify(regCenter).getDirectly("/test_job/config");
     }
     
     @Test
     void assertGetDataflowJobConfig() {
-        when(regCenter.get("/test_job/config")).thenReturn(LifecycleYamlConstants.getDataflowJobYaml());
+        when(regCenter.getDirectly("/test_job/config")).thenReturn(LifecycleYamlConstants.getDataflowJobYaml());
         JobConfigurationPOJO actual = jobConfigAPI.getJobConfiguration("test_job");
         assertJobConfig(actual);
         assertThat(actual.getProps().getProperty(DataflowJobProperties.STREAM_PROCESS_KEY), is("true"));
-        verify(regCenter).get("/test_job/config");
+        verify(regCenter).getDirectly("/test_job/config");
     }
     
     @Test
     void assertGetScriptJobConfig() {
-        when(regCenter.get("/test_job/config")).thenReturn(LifecycleYamlConstants.getScriptJobYaml());
+        when(regCenter.getDirectly("/test_job/config")).thenReturn(LifecycleYamlConstants.getScriptJobYaml());
         JobConfigurationPOJO actual = jobConfigAPI.getJobConfiguration("test_job");
         assertJobConfig(actual);
         assertThat(actual.getProps().getProperty(ScriptJobProperties.SCRIPT_KEY), is("echo"));
-        verify(regCenter).get("/test_job/config");
+        verify(regCenter).getDirectly("/test_job/config");
     }
     
     private void assertJobConfig(final JobConfigurationPOJO pojo) {
