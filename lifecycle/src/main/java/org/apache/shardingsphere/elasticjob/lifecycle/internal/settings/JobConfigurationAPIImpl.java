@@ -36,7 +36,7 @@ public final class JobConfigurationAPIImpl implements JobConfigurationAPI {
     
     @Override
     public JobConfigurationPOJO getJobConfiguration(final String jobName) {
-        String yamlContent = regCenter.get(new JobNodePath(jobName).getConfigNodePath());
+        String yamlContent = regCenter.getDirectly(new JobNodePath(jobName).getConfigNodePath());
         if (null == yamlContent) {
             return null;
         }
