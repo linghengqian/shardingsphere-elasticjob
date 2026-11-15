@@ -30,7 +30,6 @@ on:
 
 jobs:
   build:
-    if: github.repository == 'apache/shardingsphere-elasticjob'
     strategy:
       matrix:
         java: [ '25.0.2' ]
