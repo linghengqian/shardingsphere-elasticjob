@@ -17,6 +17,8 @@
 
 name: NativeTest CI - GraalVM Native Image
 
+run-name: "NativeTest metadata ${{ inputs.metadata_variant || 'committed' }}"
+
 on:
   pull_request:
     branches: [ master ]
@@ -27,6 +29,12 @@ on:
       - 'test/native/native-image-filter/**'
       - 'test/native/src/**'
   workflow_dispatch:
+    inputs:
+      metadata_variant:
+        description: 'Reachability metadata under test: a name in test/native/metadata-variants without .json, none for no metadata file, empty for the committed file'
+        required: false
+        default: ''
+        type: string
 
 jobs:
   build:
@@ -38,6 +46,20 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+      - name: Use the reachability metadata variant under test
+        env:
+          METADATA_VARIANT: ${{ inputs.metadata_variant }}
+        run: |
+          set -e
+          DST=test/native/src/test/resources/META-INF/native-image/org.apache.shardingsphere.elasticjob/elasticjob-test-native/reachability-metadata.json
+          case "$METADATA_VARIANT" in
+            '') echo 'Using the committed metadata' ;;
+            none) rm -f "$DST" ;;
+            *[!a-z0-9-]*) echo "Invalid variant: $METADATA_VARIANT"; exit 1 ;;
+            *) cp "test/native/metadata-variants/$METADATA_VARIANT.json" "$DST" ;;
+          esac
+          echo 'Metadata under test:'
+          cat "$DST" 2>/dev/null || echo '(no metadata file)'
       - name: Set up GraalVM CE ${{ matrix.java }}
         uses: graalvm/setup-graalvm@0426e2e191540e8514dff98dc52a5f5146a2a276  # v1.6.6
         with:

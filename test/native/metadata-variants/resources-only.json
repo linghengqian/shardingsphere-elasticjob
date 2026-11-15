@@ -1,0 +1,10 @@
+{
+  "resources": [
+    {
+      "condition": {
+        "typeReached": "org.apache.shardingsphere.elasticjob.kernel.executor.ElasticJobExecutor"
+      },
+      "glob": "META-INF/services/org.apache.shardingsphere.elasticjob.spi.executor.item.type.TypedJobItemExecutor"
+    }
+  ]
+}

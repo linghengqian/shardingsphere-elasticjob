@@ -1,0 +1,11 @@
+{
+  "reflection": [
+    {
+      "condition": {
+        "typeReached": "org.apache.shardingsphere.elasticjob.kernel.executor.ElasticJobExecutor"
+      },
+      "type": "org.apache.shardingsphere.elasticjob.test.natived.commons.job.executor.NativeCustomJobExecutor",
+      "allPublicConstructors": true
+    }
+  ]
+}
